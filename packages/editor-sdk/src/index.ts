@@ -1,5 +1,5 @@
 // Extracted to `dist/style.css` by the library build (see `vite.config.ts`) — external consumers
-// import it separately (`import '@template-builder/editor-sdk/style.css'`). apps/web never needs
+// import it separately (`import '@ozonesoftech/template-builder-sdk/style.css'`). apps/web never needs
 // this: its own Tailwind scan already covers every file in this package via the workspace source
 // import, using the exact same `@theme` tokens from its own `global.css`.
 import './style.css';

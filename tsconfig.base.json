@@ -18,7 +18,7 @@
       "@template-builder/types": ["packages/types/src"],
       "@template-builder/validation": ["packages/validation/src"],
       "@template-builder/block-contracts": ["packages/block-contracts/src"],
-      "@template-builder/editor-sdk": ["packages/editor-sdk/src"],
+      "@ozonesoftech/template-builder-sdk": ["packages/editor-sdk/src"],
       "@template-builder/plugin-sdk": ["packages/plugin-sdk/src"],
       "@template-builder/utils": ["packages/utils/src"]
     }

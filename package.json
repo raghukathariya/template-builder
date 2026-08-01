@@ -11,7 +11,7 @@
     "typescript": "^5.7.0"
   },
   "scripts": {
-    "build": "pnpm --filter @template-builder/editor-sdk build",
+    "build": "pnpm --filter @ozonesoftech/template-builder-sdk build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "clean": "pnpm -r clean"

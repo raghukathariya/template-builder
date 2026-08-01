@@ -1,18 +1,18 @@
 # editor-sdk
 
-Standalone home for `@template-builder/editor-sdk` — extracted from the `template-builder`
+Standalone home for `@ozonesoftech/template-builder-sdk` — extracted from the `template-builder`
 monorepo (originally `packages/editor-sdk` there) so it can be developed and published
 independently of that project's GitLab repo.
 
-## Usage (`@template-builder/editor-sdk`)
+## Usage (`@ozonesoftech/template-builder-sdk`)
 
 Embed the Template Builder block editor directly in your own product. Install the package, mint a
 short-lived token from your backend, render one component — get a working drag-and-drop canvas,
 property panel, and asset picker back.
 
 ```tsx
-import { TemplateEditor } from '@template-builder/editor-sdk';
-import '@template-builder/editor-sdk/style.css';
+import { TemplateEditor } from '@ozonesoftech/template-builder-sdk';
+import '@ozonesoftech/template-builder-sdk/style.css';
 
 <TemplateEditor
   apiBaseUrl="https://api.your-template-builder-host.com/api"
@@ -79,7 +79,7 @@ that would require shipping your API key to it.
 #### 3. Install the package
 
 ```sh
-npm install @template-builder/editor-sdk react react-dom
+npm install @ozonesoftech/template-builder-sdk react react-dom
 ```
 
 `react`/`react-dom` (^19) are peer dependencies — use whatever version your app already has.
@@ -88,8 +88,8 @@ npm install @template-builder/editor-sdk react react-dom
 
 ```tsx
 import { useCallback, useEffect, useState } from 'react';
-import { TemplateEditor } from '@template-builder/editor-sdk';
-import '@template-builder/editor-sdk/style.css';
+import { TemplateEditor } from '@ozonesoftech/template-builder-sdk';
+import '@ozonesoftech/template-builder-sdk/style.css';
 
 function MyTemplateEditorPage({ templateId }: { templateId: string }) {
   const [embedToken, setEmbedToken] = useState<string>();
@@ -184,8 +184,8 @@ import {
   EditorApiClientContext,
   EditorThemeContext,
   type EditorApiClient,
-} from '@template-builder/editor-sdk';
-import '@template-builder/editor-sdk/style.css';
+} from '@ozonesoftech/template-builder-sdk';
+import '@ozonesoftech/template-builder-sdk/style.css';
 
 const queryClient = new QueryClient();
 
@@ -242,7 +242,7 @@ all ship inside `dist/`. You don't need to install any of them yourself.
 
 ## Layout
 
-This is a small pnpm workspace containing `@template-builder/editor-sdk` plus the internal
+This is a small pnpm workspace containing `@ozonesoftech/template-builder-sdk` plus the internal
 packages it depends on (bundled into its build output, never published separately):
 
 - `packages/editor-sdk` — the SDK itself (builder-shell, blocks, rich-text, asset-library). The
@@ -250,14 +250,14 @@ packages it depends on (bundled into its build output, never published separatel
 - `packages/types`, `packages/validation`, `packages/block-contracts`, `packages/utils` — shared
   types/schemas `editor-sdk` depends on at dev/build time. Each stays `private: true` and is
   inlined into `editor-sdk`'s bundle by its Vite library build (see
-  `packages/editor-sdk/vite.config.ts`) — a consumer installing `@template-builder/editor-sdk`
+  `packages/editor-sdk/vite.config.ts`) — a consumer installing `@ozonesoftech/template-builder-sdk`
   never sees or installs these directly.
 
 ## Setup
 
 ```bash
 pnpm install
-pnpm --filter @template-builder/editor-sdk build
+pnpm --filter @ozonesoftech/template-builder-sdk build
 ```
 
 Produces `packages/editor-sdk/dist/{editor-sdk.js,editor-sdk.cjs,editor-sdk.css,index.d.ts}` —
@@ -272,7 +272,7 @@ pnpm -r clean       # remove each package's dist/.turbo
 ```
 
 Run any of these scoped to one package with `pnpm --filter <name> <script>`, e.g.
-`pnpm --filter @template-builder/editor-sdk typecheck`.
+`pnpm --filter @ozonesoftech/template-builder-sdk typecheck`.
 
 ## Publishing
 
@@ -281,6 +281,6 @@ cd packages/editor-sdk
 pnpm publish
 ```
 
-Publishes as `@template-builder/editor-sdk`, publicly, via `publishConfig.access: "public"` — no
+Publishes as `@ozonesoftech/template-builder-sdk`, publicly, via `publishConfig.access: "public"` — no
 `.npmrc`/registry setup needed for the default public npm registry. Requires being logged in as a
-user with publish rights to the `@template-builder` org (`npm login`) or an `NPM_TOKEN` in CI.
+user with publish rights to the `@ozonesoftech` org (`npm login`) or an `NPM_TOKEN` in CI.

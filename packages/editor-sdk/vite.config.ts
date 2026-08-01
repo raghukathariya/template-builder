@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
 
-// Library build for external (outside-the-monorepo) consumers of `@template-builder/editor-sdk` —
+// Library build for external (outside-the-monorepo) consumers of `@ozonesoftech/template-builder-sdk` —
 // see `package.json`'s `publishConfig`, which points the published package at this build's output
 // instead of `src/index.ts` (what apps/web resolves directly, for instant HMR in the monorepo).
 export default defineConfig({

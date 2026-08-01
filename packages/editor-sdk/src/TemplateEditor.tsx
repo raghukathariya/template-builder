@@ -12,7 +12,7 @@ export interface TemplateEditorProps {
   apiBaseUrl: string;
   templateId: string;
   /** A short-lived token minted via `POST /embed/tokens` on your own backend (see the
-   * `@template-builder/editor-sdk` README) — never a real user session. */
+   * `@ozonesoftech/template-builder-sdk` README) — never a real user session. */
   embedToken: string;
   /** Called when a request 401s because `embedToken` expired. Re-mint a token from your backend
    * and return it; the failed request is retried once with the new token. */

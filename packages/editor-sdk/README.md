@@ -1,12 +1,12 @@
-# @template-builder/editor-sdk
+# @ozonesoftech/template-builder-sdk
 
 Embed the Template Builder block editor directly in your own product. Install the package, mint a
 short-lived token from your backend, render one component — get a working
 drag-and-drop canvas, property panel, and asset picker back.
 
 ```tsx
-import { TemplateEditor } from '@template-builder/editor-sdk';
-import '@template-builder/editor-sdk/style.css';
+import { TemplateEditor } from '@ozonesoftech/template-builder-sdk';
+import '@ozonesoftech/template-builder-sdk/style.css';
 
 <TemplateEditor
   apiBaseUrl="https://api.your-template-builder-host.com/api"
@@ -73,7 +73,7 @@ that would require shipping your API key to it.
 ### 3. Install the package
 
 ```sh
-npm install @template-builder/editor-sdk react react-dom
+npm install @ozonesoftech/template-builder-sdk react react-dom
 ```
 
 `react`/`react-dom` (^19) are peer dependencies — use whatever version your app already has.
@@ -82,8 +82,8 @@ npm install @template-builder/editor-sdk react react-dom
 
 ```tsx
 import { useCallback, useEffect, useState } from 'react';
-import { TemplateEditor } from '@template-builder/editor-sdk';
-import '@template-builder/editor-sdk/style.css';
+import { TemplateEditor } from '@ozonesoftech/template-builder-sdk';
+import '@ozonesoftech/template-builder-sdk/style.css';
 
 function MyTemplateEditorPage({ templateId }: { templateId: string }) {
   const [embedToken, setEmbedToken] = useState<string>();
@@ -178,8 +178,8 @@ import {
   EditorApiClientContext,
   EditorThemeContext,
   type EditorApiClient,
-} from '@template-builder/editor-sdk';
-import '@template-builder/editor-sdk/style.css';
+} from '@ozonesoftech/template-builder-sdk';
+import '@ozonesoftech/template-builder-sdk/style.css';
 
 const queryClient = new QueryClient();
 
@@ -236,9 +236,9 @@ all ship inside `dist/`. You don't need to install any of them yourself.
 
 ## Notes for anyone building against this repo (not an external consumer)
 
-- Source lives at `packages/editor-sdk/src/`; `pnpm --filter @template-builder/editor-sdk build`
+- Source lives at `packages/editor-sdk/src/`; `pnpm --filter @ozonesoftech/template-builder-sdk build`
   produces the publishable `dist/` (`editor-sdk.js`/`.cjs`, `index.d.ts`, `editor-sdk.css`).
-- `apps/web` doesn't consume the built package — it resolves `@template-builder/editor-sdk`
+- `apps/web` doesn't consume the built package — it resolves `@ozonesoftech/template-builder-sdk`
   straight to `src/index.ts` via the workspace `main`/`types` fields (see `package.json`), so
   changes here show up instantly in the app's own dev server. `publishConfig` is what npm actually
   ships.
