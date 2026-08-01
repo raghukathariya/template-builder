@@ -1,7 +1,6 @@
 {
   "name": "@template-builder/editor-sdk",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -9,6 +8,7 @@
     "dist"
   ],
   "publishConfig": {
+    "access": "public",
     "main": "./dist/editor-sdk.cjs",
     "module": "./dist/editor-sdk.js",
     "types": "./dist/index.d.ts",

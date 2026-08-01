@@ -129,6 +129,98 @@ etc.), not just `min-height`.
 | `theme`           | `'light' \| 'dark'`                | no       | Forces a mode. Omit to follow the visitor's OS preference. Never reads or mutates your page's own theme. |
 | `className`       | `string`                           | no       | Applied to the outermost wrapper.                                             |
 
+## Keyboard shortcuts
+
+Built into `<TemplateEditor>`/`BuilderShell` — nothing to wire up:
+
+| Shortcut                | Action                          |
+| ----------------------- | -------------------------------- |
+| `Delete` / `Backspace`  | Delete the selected block        |
+| `Ctrl/Cmd+C`            | Copy the selected block          |
+| `Ctrl/Cmd+V`            | Paste after the selected block   |
+| `Ctrl/Cmd+D`            | Duplicate the selected block     |
+| `Ctrl/Cmd+Z`            | Undo                              |
+| `Ctrl/Cmd+Shift+Z`, `Ctrl/Cmd+Y` | Redo                     |
+| `Esc`                   | Exit full screen                 |
+
+All disabled while a contentEditable block (rich text) has focus, so e.g. `Ctrl+Z` inside a
+heading undoes the text edit, not the block tree.
+
+## Error handling
+
+- **Load/save failures** — `<TemplateEditor>` renders an inline error in place of the canvas if
+  the template fails to load, or has no draft version to edit. A failed `onSaved` save leaves the
+  "Unsaved changes" indicator in place so nothing is silently lost; there's no `onSaveError` prop —
+  inspect the rejected promise from your own network layer/devtools if you need to distinguish
+  failure reasons.
+- **Auth failures** — any request that 401s (expired `embedToken`) triggers `onTokenExpired`
+  automatically and retries once with the fresh token. If `onTokenExpired` itself rejects, or the
+  retried request 401s again, that failure surfaces as a normal load/save error above — the SDK
+  does not loop or retry a second time.
+- **Unknown template/insufficient permissions** — a `templateId` outside the minting API key's
+  `allowedTemplateIds`, or a token missing the `update` permission, causes `POST /embed/tokens` (or
+  a mutation using that token) to fail with a 4xx from the API — handle that on your backend/route
+  before ever rendering `<TemplateEditor>`.
+
+## Advanced: rendering pieces directly
+
+`<TemplateEditor>` is a thin wrapper: it owns a `QueryClient`, builds an `EditorApiClient` from
+your embed token, and renders `BuilderShell` inside those providers. If you need more control —
+your own data-fetching/auth instead of embed tokens, a custom save flow, or the asset library
+outside the property panel's image picker — render the same pieces it uses instead of going
+through it.
+
+```tsx
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import {
+  BuilderShell,
+  AssetLibraryPanel,
+  EditorApiClientContext,
+  EditorThemeContext,
+  type EditorApiClient,
+} from '@template-builder/editor-sdk';
+import '@template-builder/editor-sdk/style.css';
+
+const queryClient = new QueryClient();
+
+// Any object satisfying `EditorApiClient` works — e.g. your app's existing authenticated
+// fetch wrapper, using cookies/session instead of an embed token.
+const apiClient: EditorApiClient = {
+  request: (path, options) => myAppApiRequest(path, options),
+};
+
+function MyCustomEditor() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <EditorApiClientContext.Provider value={apiClient}>
+        <EditorThemeContext.Provider value={true /* dark mode, or omit for OS preference */}>
+          <BuilderShell
+            versionId={draftVersion.id}
+            initialTree={draftVersion.blocks}
+            onSave={(blocks) => saveDraft(blocks)}
+            isSaving={isSaving}
+          />
+        </EditorThemeContext.Provider>
+      </EditorApiClientContext.Provider>
+    </QueryClientProvider>
+  );
+}
+```
+
+Exported pieces beyond `TemplateEditor`:
+
+| Export                                     | What it is                                                                                          |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `BuilderShell`                              | The canvas/palette/property-panel/toolbar, undo-redo included. Needs `EditorApiClientContext` above it. |
+| `AssetLibraryPanel`                         | Standalone asset grid (upload/search/delete/preview). Pass `onSelect` to use it as a picker; omit it for a management view where clicking a card just expands details. |
+| `EditorApiClientContext` / `useEditorApiClient` | The context/hook `BuilderShell`'s data-fetching hooks read from. Provide any object implementing `request<T>(path, options)` — JSON body by default, sent as-is if it's a `FormData`. |
+| `EditorThemeContext`                        | `boolean \| undefined` — `true`/`false` forces dark/light, `undefined` (no provider) follows the OS preference. Never reads/writes `document.documentElement` itself. |
+| `IconDesktop`, `IconMobile`                 | The breakpoint-switcher icons used in the property panel's style section, exposed in case you build a custom toolbar around `BuilderShell`. |
+
+`BuilderShell` and `AssetLibraryPanel` need `EditorApiClientContext` provided above them — every
+data-fetching hook they use (`template.api.ts`, `assets.api.ts`) reads from
+`useEditorApiClient()`, which throws if no provider is found.
+
 ## CORS
 
 Requests from `apiBaseUrl` must be allowed to reach your frontend's origin. This is driven by the
