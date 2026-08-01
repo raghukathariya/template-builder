@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+/* Mirrors apps/web's `dark:` convention (a `.dark` class on an ancestor, not a media query) so
+ * `<TemplateEditor theme="dark">` — which sets this class on its own wrapper, never on the host
+ * page's `<html>` — actually activates every `dark:` utility used throughout this package. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Same muted-lavender palette as apps/web's global.css, so an embedded editor matches the
+   * hosted app's look rather than Tailwind's default vivid indigo. */
+  --color-indigo-50: #f8f7fb;
+  --color-indigo-100: #f1eef6;
+  --color-indigo-200: #e2dced;
+  --color-indigo-300: #c8bfdc;
+  --color-indigo-400: #a99bc4;
+  --color-indigo-500: #8f7dae;
+  --color-indigo-600: #7a6699;
+  --color-indigo-700: #665581;
+  --color-indigo-800: #514369;
+  --color-indigo-900: #3c3250;
+  --color-indigo-950: #251f33;
+}

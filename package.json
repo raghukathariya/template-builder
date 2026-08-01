@@ -1,0 +1,19 @@
+{
+  "name": "editor-sdk-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20 <25",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "scripts": {
+    "build": "pnpm --filter @template-builder/editor-sdk build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
+  }
+}

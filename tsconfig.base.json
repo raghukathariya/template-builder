@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "composite": false,
+    "baseUrl": ".",
+    "paths": {
+      "@template-builder/types": ["packages/types/src"],
+      "@template-builder/validation": ["packages/validation/src"],
+      "@template-builder/block-contracts": ["packages/block-contracts/src"],
+      "@template-builder/editor-sdk": ["packages/editor-sdk/src"],
+      "@template-builder/plugin-sdk": ["packages/plugin-sdk/src"],
+      "@template-builder/utils": ["packages/utils/src"]
+    }
+  }
+}
