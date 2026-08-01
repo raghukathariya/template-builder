@@ -14,6 +14,7 @@
     "build": "pnpm --filter @ozonesoftech/template-builder-sdk build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
-    "clean": "pnpm -r clean"
+    "clean": "pnpm -r clean",
+    "release": "bash scripts/release.sh"
   }
 }

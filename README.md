@@ -274,6 +274,17 @@ pnpm -r clean       # remove each package's dist/.turbo
 Run any of these scoped to one package with `pnpm --filter <name> <script>`, e.g.
 `pnpm --filter @ozonesoftech/template-builder-sdk typecheck`.
 
+## Releasing
+
+```bash
+pnpm release           # bump patch (default), commit, tag, push
+pnpm release minor     # or: major, or an explicit version like 1.2.3
+```
+
+Runs `scripts/release.sh`: bumps `packages/editor-sdk/package.json`'s version via `npm version`
+(commit message `chore(release): editor-sdk vX.Y.Z`, tag `vX.Y.Z`), then pushes the commit and tag
+to `origin`. Requires a clean working tree — commit or stash first.
+
 ## Publishing
 
 ```bash
@@ -281,6 +292,9 @@ cd packages/editor-sdk
 pnpm publish
 ```
 
-Publishes as `@ozonesoftech/template-builder-sdk`, publicly, via `publishConfig.access: "public"` — no
+Run this after `pnpm release` has bumped/tagged the version you want to ship. Publishes as
+`@ozonesoftech/template-builder-sdk`, publicly, via `publishConfig.access: "public"` — no
 `.npmrc`/registry setup needed for the default public npm registry. Requires being logged in as a
-user with publish rights to the `@ozonesoftech` org (`npm login`) or an `NPM_TOKEN` in CI.
+user with publish rights to the `@ozonesoftech` org (`npm login`) or an `NPM_TOKEN` in CI; if the
+account has 2FA on publish, npm will prompt for an OTP/browser approval interactively. npm refuses
+to publish over an already-published version — bump again if that happens.
