@@ -297,25 +297,23 @@ Run this after `pnpm release` has bumped/tagged the version you want to ship. Pu
 default public npm registry. npm refuses to publish over an already-published version — bump
 again if that happens.
 
-### Auth: skipping the OTP prompt
+### Auth
 
-By default, publishing with an account that has 2FA on writes prompts for an OTP/browser approval
-on every `pnpm publish`. To avoid that, this repo's `.npmrc` reads an auth token from `$NPM_TOKEN`
-(the line itself has no secret in it, so it's safe to commit):
+Default flow: `npm login` once per machine (opens a browser to approve), then `pnpm publish` reuses
+that session — no OTP prompt as long as the session hasn't expired. If `pnpm publish` ever 404s
+with "not found or you do not have permission", first check `npm whoami` — a 401 there means the
+session expired and you need to `npm login` again.
+
+To skip interactive login entirely (e.g. CI), generate a **Granular Access Token → Automation**
+type on npmjs.com (Account Settings → Access Tokens), scoped to
+`@ozonesoftech/template-builder-sdk` or the whole `@ozonesoftech` org — automation tokens are
+exempt from OTP even with 2FA on writes. Then add, in your own **local, uncommitted** `.npmrc` (or
+a CI secret), never this repo's:
 
 ```
-//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+//registry.npmjs.org/:_authToken=npm_xxxxxxxxxxxx
 ```
 
-One-time setup:
-
-1. On npmjs.com: **Account Settings → Access Tokens → Generate New Token → Granular Access
-   Token**. Set type to **Automation**, scope it to read/write on `@ozonesoftech/template-builder-sdk`
-   (or the whole `@ozonesoftech` org), and no IP/expiry restriction that would break local use.
-   Automation tokens are exempt from the OTP prompt even when the account has 2FA on writes.
-2. Copy the generated token once (npm only shows it at creation time) and export it in your shell
-   profile — never commit it: `export NPM_TOKEN=npm_xxxxxxxxxxxx`.
-3. `pnpm publish` (from `packages/editor-sdk`) now authenticates via that token automatically, no
-   OTP prompt.
-
-For CI, set `NPM_TOKEN` as a secret in the pipeline's environment instead of a shell profile.
+Don't commit a repo-level `.npmrc` with `${NPM_TOKEN}` unless every publisher's shell reliably has
+that env var set — pnpm doesn't fall back to the global/session auth when the substitution fails,
+it sends the broken value, which manifests as a 404 on publish (we hit exactly this).
